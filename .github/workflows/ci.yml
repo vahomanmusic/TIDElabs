@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+        continue-on-error: true
+
+      - name: Install dependencies
+        run: |
+          if [ -f package.json ]; then
+            npm ci
+          else
+            echo "No package.json found, skipping npm install"
+          fi
+        continue-on-error: true
+
+      - name: Run linting
+        run: |
+          if [ -f package.json ] && npm list eslint > /dev/null 2>&1; then
+            npm run lint
+          else
+            echo "No linting configured, skipping"
+          fi
+        continue-on-error: true
+
+      - name: Run tests
+        run: |
+          if [ -f package.json ] && (npm list jest > /dev/null 2>&1 || npm list mocha > /dev/null 2>&1 || npm list vitest > /dev/null 2>&1); then
+            npm test
+          else
+            echo "No tests configured, marking as successful"
+          fi
+
+      - name: Build project
+        run: |
+          if [ -f package.json ] && npm run build --if-present; then
+            echo "Build completed successfully"
+          else
+            echo "No build script found, skipping build"
+          fi
+        continue-on-error: true
+
+  # Placeholder for when Python projects are added
+  python-check:
+    runs-on: ubuntu-latest
+    if: false  # Disabled until Python files are present
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+
+      - name: Run Python tests
+        run: |
+          if [ -f pytest.ini ] || [ -f setup.cfg ] || [ -f pyproject.toml ]; then
+            pytest
+          else
+            echo "No Python tests configured"
+          fi

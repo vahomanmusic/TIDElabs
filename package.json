@@ -1,0 +1,56 @@
+{
+  "name": "tidelabs",
+  "version": "2050.1.0",
+  "description": "UngaBunga 2050 - A retro-futuristic laboratory experience",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server . -p 8080 -c-1 --cors",
+    "dev": "npx live-server --port=8080 --host=0.0.0.0 --cors",
+    "build": "npm run minify-css && npm run minify-js",
+    "minify-css": "npx clean-css-cli -o assets/css/main.min.css assets/css/main.css assets/css/retro-theme.css",
+    "minify-js": "npx terser assets/js/main.js assets/js/animations.js -o assets/js/bundle.min.js --compress --mangle",
+    "lint": "npx eslint assets/js/*.js",
+    "lint:fix": "npx eslint assets/js/*.js --fix",
+    "test": "echo \"No tests configured yet\" && exit 0",
+    "validate": "npx html-validate index.html",
+    "optimize": "npm run build && npm run validate",
+    "serve": "npm start"
+  },
+  "keywords": [
+    "retro",
+    "futuristic",
+    "nostalgic",
+    "laboratory",
+    "interactive",
+    "web-app",
+    "2050",
+    "ungabunga"
+  ],
+  "author": "TIDElabs",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vahomanmusic/TIDElabs.git"
+  },
+  "homepage": "https://github.com/vahomanmusic/TIDElabs#readme",
+  "bugs": {
+    "url": "https://github.com/vahomanmusic/TIDElabs/issues"
+  },
+  "devDependencies": {
+    "clean-css-cli": "^5.6.2",
+    "eslint": "^8.57.0",
+    "html-validate": "^8.7.4",
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2",
+    "terser": "^5.26.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  }
+}
